@@ -17,10 +17,14 @@ let tasks = require('./src/data/tasks.json')
 // TASK LIST METHODS
 app.get('/', (req, res) => {
   const title = 'Tasks List'
-  res.render('index', {title, tasks})
+  let counter = 0
+  let auxTasks = tasks.filter(elem => {
+    return !elem.completionDate
+  })
+  res.render('index', {title, auxTasks, counter})
 })
 
-app.post('/', (req, res) => {
+app.post('/add', (req, res) => {
   let bodyTask = req.body.bodyTask
   let date = new Date()
   let day = date.getDate()
@@ -51,6 +55,15 @@ app.get('/delete/:id', (req, res) => {
   res.redirect('/')
 })
 
+app.get('/completed/delete/:id', (req, res) => {
+  let id = req.params.id
+  tasks = tasks.filter(elem => elem.id !== id)
+  fs.writeFile(fileName, JSON.stringify(tasks, null, 2), function (err) {
+    if (err) return console.log(err)
+  })
+  res.redirect('/completed')
+})
+
 // COMPLETED
 app.get('/completed/:id', (req, res) => {
   let id = req.params.id
@@ -63,10 +76,25 @@ app.get('/completed/:id', (req, res) => {
   res.redirect('/')
 })
 
+// ALL COMPLETED
+app.get('/completedAll', (req, res) => {
+  tasks.map(task => {
+    task.completionDate = 'Completed on ' + new Date()
+  })
+  fs.writeFile(fileName, JSON.stringify(tasks, null, 2), function (err) {
+    if (err) return console.log(err)
+  })
+  res.redirect('/')
+})
+
 // TASK COMPLETED METHODS
 app.get('/completed', (req, res) => {
   const title = 'Task Completed'
-  res.render('completed', {title, tasks})
+  let counter = 0
+  let auxTasks = tasks.filter(elem => {
+    return elem.completionDate
+  })
+  res.render('completed', {title, auxTasks, counter})
 })
 
 app.listen(3000, () => console.log('Listening ont PORT 3000'))
