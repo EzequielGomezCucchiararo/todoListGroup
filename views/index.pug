@@ -1,3 +1,9 @@
 extends layout
 block content
-  
+  form.form-inline(action='/', method='POST', role='form')
+    .form-group
+      input.form-control(type='text', name='bodyTask', placeholder='Add a new task')
+    button.btn.btn-primary(type='submit') Submit
+  ul.list-group
+    each task in tasks
+      li.list-group-item= task.body
