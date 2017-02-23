@@ -5,5 +5,9 @@ block content
       input.form-control(type='text', name='bodyTask', placeholder='Add a new task')
     button.btn.btn-primary(type='submit') Submit
   ul.list-group
-    each task in tasks
-      li.list-group-item= task.body
+    each task, index in tasks
+      li(id= task.id, class="list-group-item")= (index + 1) + '.\t' +task.body
+        p(style="color: #92928f")= task.creationDate
+        button.btn.btn-success completed
+        a(href="/delete/" + task.id)
+          button.btn.btn-danger delete

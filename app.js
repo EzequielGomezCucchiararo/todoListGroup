@@ -26,14 +26,25 @@ app.post('/', (req, res) => {
   let day = date.getDate()
   let month = date.getMonth()
   let year = date.getFullYear()
+  let h = addZero(date.getHours())
+  let m = addZero(date.getMinutes())
   let newTask = {
-    id: tasks.length + 1,
+    id: tasks.length ? tasks[tasks.length - 1].id + 1 : 1,
     body: bodyTask,
-    creationDate: `${day} / ${month + 1} / ${year}`,
+    creationDate: `Created on ${day} / ${month + 1} / ${year} at ${h}:${m}`,
     completionDate: '',
     completed: 'false'
   }
   tasks.push(newTask)
+  fs.writeFile(fileName, JSON.stringify(tasks, null, 2), function (err) {
+    if (err) return console.log(err)
+  })
+  res.redirect('/')
+})
+
+app.get('/delete/:id', (req, res) => {
+  let id = +req.params.id
+  tasks = tasks.filter(elem => elem.id !== id)
   fs.writeFile(fileName, JSON.stringify(tasks, null, 2), function (err) {
     if (err) return console.log(err)
   })
@@ -47,3 +58,10 @@ app.get('/completed', (req, res) => {
 })
 
 app.listen(3000, () => console.log('Listening ont PORT 3000'))
+
+function addZero (i) {
+  if (i < 10) {
+    i = '0' + i
+  }
+  return i
+}
