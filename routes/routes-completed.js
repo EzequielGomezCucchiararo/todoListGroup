@@ -1,7 +1,7 @@
 const express = require('express')
 const newFormatedDate = require('../src/js/newFormatedDate.js')
 const router = express.Router()
-const fileName = '../src/data/tasks.json'
+const fileName = './src/data/tasks.json'
 const fs = require('fs')
 
 let tasks = require('../src/data/tasks.json')

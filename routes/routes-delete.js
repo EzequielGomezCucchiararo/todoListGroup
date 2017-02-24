@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const fileName = '../src/data/tasks.json'
+const fileName = './src/data/tasks.json'
 const fs = require('fs')
 
 let tasks = require('../src/data/tasks.json')
